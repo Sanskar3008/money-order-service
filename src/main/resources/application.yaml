@@ -2,25 +2,32 @@ server:
   port: 8083
 
 spring:
-  application:
-    name: money-order-service
+  datasource:
+    url: jdbc:h2:mem:rmo
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
 
-    datasource:
-      url: jdbc:h2:mem:agentdb
-      driver-class-name: org.h2.Driver
-      username: sa
-      password:
+  h2:
+    console:
+      enabled: true
 
-    jpa:
-      hibernate:
-        ddl-auto: update
-      show-sql: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
-    h2:
-      console:
-        enabled: true
-        path: /h2-console
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://dummy-issuer
 
-  jwt:
-    secret: rmo-secret-key-rmo-secret-key-rmo-secret-key
+rmo:
+  per-check-limit: 50000
+  max-orders: 20
+  fee-amount: 500
+  compliance-threshold: 100000
 
+agent-limit:
+  url: http://localhost:8082
