@@ -75,4 +75,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         chain.doFilter(req, res);
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getRequestURI().startsWith("/h2-console");
+    }
+
 }

@@ -59,7 +59,16 @@ public class MoneyOrderService {
     public UUID create(BigDecimal amount, boolean feeEnabled,
                        UUID agentId, UUID operatorId) {
 
-        agentLimitClient.validateLimit(agentId, amount);
+        try {
+            agentLimitClient.validateLimit(agentId, amount);
+        } catch (Exception e) {
+            Throwable root = e;
+            while (root.getCause() != null) {
+                root = root.getCause();
+            }
+            throw new RuntimeException("Agent Limit call failed: " + root.getMessage(), root);
+        }
+
 
         List<MoneyOrderSplitDto> splits = splitAmount(amount);
 
